@@ -26,7 +26,7 @@ pipeline {
                 script {
                     sh '''
                         docker run --rm \
-                        -v $WORKSPACE:/app \
+                        -v $pwd:/app \
                         -w /app \
                         mcr.microsoft.com/dotnet/sdk:8.0 \
                         /bin/bash -c "dotnet restore && dotnet build -c Release && dotnet publish -c Release -o out"
