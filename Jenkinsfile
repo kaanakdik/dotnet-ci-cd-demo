@@ -7,23 +7,20 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 git credentialsId: 'github-creds', url: 'https://github.com/kaanakdik/dotnet-cicd-demo.git'
             }
         }
 
-        stage('Restore & Build') {
+        stage('Build in Docker') {
             steps {
-                sh 'dotnet restore'
-                sh 'dotnet build --configuration Release'
-            }
-        }
-
-        stage('Publish') {
-            steps {
-                sh 'dotnet publish -c Release -o out'
+                script {
+                    sh '''
+                        docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 \
+                        /bin/bash -c "dotnet restore && dotnet build -c Release && dotnet publish -c Release -o out"
+                    '''
+                }
             }
         }
 
