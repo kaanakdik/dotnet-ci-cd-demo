@@ -7,31 +7,23 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-creds', url: 'https://github.com/kaanakdik/dotnet-cicd-demo.git'
+                git credentialsId: 'github-creds', url: 'https://github.com/kaanakdik/dotnet-ci-cd-demo.git'
             }
         }
 
-        stage('Klasor Ogrenme') {
+        stage('Restore & Build') {
             steps {
-                script {
-                    sh 'ls -R $WORKSPACE'
-                }
+                sh 'dotnet restore'
+                sh 'dotnet build --configuration Release'
             }
         }
 
-        stage('Build in Docker') {
+        stage('Publish') {
             steps {
-                script {
-                    sh '''
-                        docker run --rm \
-                        -v $pwd/:/app \
-                        -w /app \
-                        mcr.microsoft.com/dotnet/sdk:8.0 \
-                        /bin/bash -c "dotnet restore && dotnet build -c Release && dotnet publish -c Release -o out"
-                    '''
-                }
+                sh 'dotnet publish -c Release -o out'
             }
         }
 
