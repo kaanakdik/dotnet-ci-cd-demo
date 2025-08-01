@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     sh 'ls -R $WORKSPACE'
-                    sh 'docker run --rm -v ${env.WORKSPACE}:/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 /bin/bash -c "dotnet restore MyApi.sln && dotnet build MyApi.sln -c Release && dotnet publish MyApi.sln -c Release -o out"'
+                    sh 'docker run --rm -v ${env.WORKSPACE}:/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 /bin/bash -c "dotnet restore MyApi.csproj && dotnet build MyApi.csproj -c Release && dotnet publish MyApi.csproj -c Release -o out"'
                 }
             }
         }
