@@ -14,24 +14,22 @@ pipeline {
             }
         }
 
-        stage('Restore & Build') {
+        stage('Build in Docker') {
             steps {
-                sh 'dotnet restore'
-                sh 'dotnet build --configuration Release'
+                script {
+                    sh '''
+                        docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 \
+                        /bin/bash -c "dotnet restore && dotnet build -c Release && dotnet publish -c Release -o out"
+                    '''
+                }
             }
         }
 
-        stage('Publish') {
-            steps {
-                sh 'dotnet publish -c Release -o out'
-            }
-        }
-
-        stage('Docker Build') {
+         stage('Docker Build') {
             steps {
                 sh 'docker build -t $IMAGE_NAME .'
             }
-        }
+        }       
 
         stage('Docker Run') {
             steps {
