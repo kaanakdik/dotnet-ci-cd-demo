@@ -13,11 +13,19 @@ pipeline {
             }
         }
 
+        stage('Klasor Ogrenme') {
+            steps {
+                script {
+                    sh 'ls -R $WORKSPACE'
+                }
+            }
+        }
+
         stage('Build in Docker') {
             steps {
                 script {
                     sh '''
-                        docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 \
+                        docker run --rm -v $(pwd):/app -w /app/MYAPI mcr.microsoft.com/dotnet/sdk:8.0 \
                         /bin/bash -c "dotnet restore && dotnet build -c Release && dotnet publish -c Release -o out"
                     '''
                 }
