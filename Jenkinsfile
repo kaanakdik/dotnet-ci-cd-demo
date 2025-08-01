@@ -20,7 +20,7 @@ pipeline {
                     sh 'ls -R $WORKSPACE'
                     sh '''
                         docker run --rm -v $WORKSPACE:/app -w /app mcr.microsoft.com/dotnet/sdk:8.0 \
-                        /bin/bash -c "dotnet restore MyApi.sln && dotnet build MyApi.sln -c Release && dotnet publish MyApi.sln -c Release -o out"
+                        /bin/bash -c dotnet restore MyApi.sln && dotnet build MyApi.sln -c Release && dotnet publish MyApi.sln -c Release -o out
                     '''
                 }
             }
